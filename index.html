@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">  <meta http-equiv="Cross-Origin-Opener-Policy" content="same-origin-allow-popups">
+  <meta http-equiv="Cross-Origin-Embedder-Policy" content="require-corp">  <title>Aura — Premium Productivity Dashboard</title>
+  <meta name="description"
+    content="A gorgeous, cloud-synced productivity dashboard featuring Google Sign-In, real-time Task Board, and Pomodoro Focus Timer.">
+  <link rel="stylesheet" href="style.css">
+  <!-- Google Fonts: Outfit and Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+    rel="stylesheet">
+</head>
+
+<body>
+
+  <!-- Glowing Background Blobs -->
+  <div class="glow-bg">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+    <div class="blob blob-3"></div>
+  </div>
+
+  <!-- Loading Screen -->
+  <div id="loading-screen" class="screen active">
+    <div class="loader-container">
+      <div class="loader-circle"></div>
+      <div class="loader-text">Loading Aura</div>
+    </div>
+  </div>
+
+  <!-- Firebase Setup Wizard (Shows if Firebase is not initialized) -->
+  <div id="setup-wizard" class="screen">
+    <div class="glass-card wizard-card">
+      <div class="wizard-header">
+        <div class="logo">
+          <span class="logo-dot"></span>
+          <h2>AURA</h2>
+        </div>
+        <h3>Initialize Firebase</h3>
+        <p>Set up your Firebase Web App Configuration to unlock Google Sign-In and Firestore cloud synchronization.</p>
+      </div>
+
+      <div class="wizard-body">
+        <div class="instructions">
+          <ol>
+            <li>Go to the <a href="https://console.firebase.google.com/" target="_blank" rel="noopener">Firebase
+                Console</a> and create/open a project.</li>
+            <li>Enable <strong>Google Sign-In</strong> in Authentication.</li>
+            <li>Create a <strong>Cloud Firestore</strong> database.</li>
+            <li>Add a <strong>Web App</strong> to get your configuration object.</li>
+          </ol>
+        </div>
+
+        <form id="config-form">
+          <div class="input-group">
+            <label for="config-paste">Paste your Firebase Config JSON here</label>
+            <textarea id="config-paste"
+              placeholder='const firebaseConfig = {&#10;  apiKey: "AIzaSy...",&#10;  authDomain: "your-app.firebaseapp.com",&#10;  projectId: "your-app",&#10;  ...&#10;};'
+              rows="6"></textarea>
+          </div>
+          <div class="form-divider"><span>OR ENTER INDIVIDUALLY</span></div>
+          <div class="grid-2">
+            <div class="input-group">
+              <label for="api-key">API Key *</label>
+              <input type="text" id="api-key" placeholder="AIzaSy...">
+            </div>
+            <div class="input-group">
+              <label for="auth-domain">Auth Domain *</label>
+              <input type="text" id="auth-domain" placeholder="your-app.firebaseapp.com">
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="input-group">
+              <label for="project-id">Project ID *</label>
+              <input type="text" id="project-id" placeholder="your-app">
+            </div>
+            <div class="input-group">
+              <label for="app-id">App ID *</label>
+              <input type="text" id="app-id" placeholder="1:12345:web:abcd...">
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary" id="btn-save-config">Initialize & Reload</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Login Screen -->
+  <div id="login-screen" class="screen active">
+    <div class="login-container">
+      <div class="glass-card login-card">
+        <div class="brand">
+          <span class="brand-glow"></span>
+          <div class="logo">
+            <span class="logo-dot"></span>
+            <h1>AURA</h1>
+          </div>
+        </div>
+        <h2 class="title">Align your focus.<br>Elevate your flow.</h2>
+        <p class="subtitle">A premium personal productivity space synced seamlessly with your Google Account.</p>
+
+        <button class="btn btn-google" id="btn-google-login">
+          <svg class="google-icon" viewBox="0 0 24 24" width="20" height="20">
+            <path fill="#EA4335"
+              d="M12 5.04c1.83 0 3.22.78 3.92 1.44l2.91-2.91C17.07 1.95 14.77 1 12 1 7.35 1 3.4 3.65 1.5 7.5l3.52 2.73C5.9 7.22 8.7 5.04 12 5.04z" />
+            <path fill="#4285F4"
+              d="M23.49 12.27c0-.81-.07-1.59-.2-2.36H12v4.51h6.46c-.29 1.48-1.14 2.73-2.4 3.58l3.71 2.88c2.17-2 3.72-4.94 3.72-8.61z" />
+            <path fill="#FBBC05"
+              d="M5.02 10.23c-.24-.73-.38-1.5-.38-2.31 0-.81.14-1.58.38-2.31L1.5 4.88C.54 6.8 0 8.94 0 11.19c0 2.25.54 4.39 1.5 6.31l3.52-2.73c-.24-.73-.38-1.5-.38-2.31z" />
+            <path fill="#34A853"
+              d="M12 23c3.24 0 5.97-1.07 7.96-2.91l-3.71-2.88c-1.03.69-2.35 1.11-4.25 1.11-3.3 0-6.1-2.18-7.1-5.19L1.38 15.86C3.28 19.72 7.23 23 12 23z" />
+          </svg>
+          <span>Sign in with Google</span>
+        </button>
+
+        <div class="feature-bullets">
+          <div class="bullet">
+            <span class="bullet-icon">✦</span>
+            <div>
+              <h4>Cloud Synchronized Tasks</h4>
+              <p>Your workspace is always up-to-date across all screens.</p>
+            </div>
+          </div>
+          <div class="bullet">
+            <span class="bullet-icon">✦</span>
+            <div>
+              <h4>Pomodoro Focus Engine</h4>
+              <p>Immersive focus states built directly into your workflow.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Screen -->
+  <div id="dashboard-screen" class="screen">
+    <!-- Navigation Bar -->
+    <header class="navbar">
+      <div class="logo">
+        <span class="logo-dot"></span>
+        <h2>AURA</h2>
+      </div>
+
+      <div class="live-clock-nav" id="nav-clock">
+        00:00:00
+      </div>
+
+      <div class="user-profile">
+        <div class="sync-indicator tool-tip" id="sync-status" data-tooltip="Cloud Sync Connected">
+          <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor">
+            <path
+              d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z" />
+          </svg>
+          <span class="sync-dot"></span>
+        </div>
+        <img id="user-avatar" class="avatar" src="" alt="Profile Photo">
+        <div class="user-details">
+          <span id="user-name" class="name">User Name</span>
+          <span id="user-email" class="email">user@email.com</span>
+        </div>
+        <button id="btn-logout" class="btn-icon logout-btn" title="Sign Out">
+          <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+            stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+            <polyline points="16 17 21 12 16 7"></polyline>
+            <line x1="21" y1="12" x2="9" y2="12"></line>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Workspace Dashboard Grid -->
+    <main class="dashboard-grid">
+
+      <!-- Greeting and Date Display Panel -->
+      <section class="welcome-banner full-width">
+        <div class="welcome-text">
+          <h1 id="dashboard-greeting">Hello, User</h1>
+          <p id="dashboard-date">Wednesday, June 24, 2026</p>
+        </div>
+        <div class="dashboard-stats">
+          <div class="stat-card">
+            <span class="stat-num" id="stat-pending">0</span>
+            <span class="stat-label">Tasks Left</span>
+          </div>
+          <div class="stat-card">
+            <span class="stat-num" id="stat-completed">0</span>
+            <span class="stat-label">Done Today</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- Task Manager Column -->
+      <section class="glass-card task-card-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 11l3 3L22 4"></path>
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path>
+            </svg>
+            <h3>Daily Focus Tasks</h3>
+          </div>
+          <span class="cloud-sync-tag" id="cloud-sync-tag">Cloud Synced</span>
+        </div>
+
+        <form id="task-form" class="task-form">
+          <div class="task-form-main">
+            <input type="text" id="task-input" placeholder="What are you focusing on next?" required autocomplete="off">
+            <button type="submit" class="btn btn-add" title="Add Task">
+              <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.5"
+                stroke-linecap="round" stroke-linejoin="round">
+                <line x1="12" y1="5" x2="12" y2="19"></line>
+                <line x1="5" y1="12" x2="19" y2="12"></line>
+              </svg>
+            </button>
+          </div>
+          <div class="task-form-details">
+            <div class="form-detail-group">
+              <label for="task-priority">Priority</label>
+              <select id="task-priority" required>
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div class="form-detail-group">
+              <label for="task-deadline">Deadline</label>
+              <input type="date" id="task-deadline">
+            </div>
+            <div class="form-detail-group">
+              <label for="task-duration">Duration (mins)</label>
+              <input type="number" id="task-duration" placeholder="e.g. 30" min="1">
+            </div>
+          </div>
+        </form>
+
+        <div class="filters">
+          <button class="filter-tab active" data-filter="all">All</button>
+          <button class="filter-tab" data-filter="active">Active</button>
+          <button class="filter-tab" data-filter="completed">Completed</button>
+        </div>
+
+        <div class="task-list-wrapper">
+          <ul id="task-list" class="task-list">
+            <!-- Dynamic task items go here -->
+            <li class="task-item-empty">
+              <span class="empty-emoji">📝</span>
+              <p>Your workspace is clear. Add a task to start!</p>
+            </li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Focus Engine Timer Column -->
+      <section class="glass-card timer-card-panel" id="timer-panel">
+        <div class="panel-header">
+          <div class="panel-title">
+            <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2"
+              stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            <h3>Focus Engine</h3>
+          </div>
+          <div class="timer-modes">
+            <button class="mode-tab active" data-mode="focus">Focus</button>
+            <button class="mode-tab" data-mode="break">Break</button>
+          </div>
+        </div>
+
+        <div class="timer-display-container">
+          <!-- Circular countdown visual progress -->
+          <div class="circular-progress">
+            <svg class="progress-ring" width="260" height="260">
+              <!-- Background Ring -->
+              <circle class="progress-ring-bg" stroke="rgba(255, 255, 255, 0.05)" stroke-width="8" fill="transparent"
+                r="116" cx="130" cy="130" />
+              <!-- Running Ring -->
+              <circle class="progress-ring-circle" stroke="url(#timer-gradient)" stroke-width="8"
+                stroke-dasharray="728.8" stroke-dashoffset="0" stroke-linecap="round" fill="transparent" r="116"
+                cx="130" cy="130" />
+
+              <!-- Gradient Definition -->
+              <defs>
+                <linearGradient id="timer-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="var(--accent-gradient-start)" />
+                  <stop offset="100%" stop-color="var(--accent-gradient-end)" />
+                </linearGradient>
+              </defs>
+            </svg>
+            <div class="timer-time" id="timer-clock">25:00</div>
+            <div class="timer-label" id="timer-status-label">STAY FOCUSED</div>
+          </div>
+        </div>
+
+        <div class="timer-controls">
+          <button class="btn btn-control btn-start" id="timer-start">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M8 5v14l11-7z" />
+            </svg>
+            <span>Start</span>
+          </button>
+          <button class="btn btn-control btn-pause hidden" id="timer-pause">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
+              <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z" />
+            </svg>
+            <span>Pause</span>
+          </button>
+          <button class="btn btn-control btn-secondary" id="timer-reset">
+            <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="2.5"
+              stroke-linecap="round" stroke-linejoin="round">
+              <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"></path>
+            </svg>
+            <span>Reset</span>
+          </button>
+        </div>
+
+        <div class="timer-quote">
+          <p id="focus-quote">"Focus is a muscle, and you are building it right now."</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+
+</html>

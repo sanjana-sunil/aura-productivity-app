@@ -19,6 +19,7 @@ import {
   clearConfig
 } from "./firebase-config.js";
 
+import { renderAnalytics } from "./analytics.js";
 import {
   getCompletedTasks,
   getCompletionRate,
@@ -217,6 +218,8 @@ if (isInitialized) {
         // Clear locally loaded tasks
         tasks = [];
         renderTasks();
+        renderKPIs(tasks);
+        renderAnalytics(tasks);
       } catch (err) {
         console.error("Logout failed:", err);
       }
@@ -416,6 +419,8 @@ if (isInitialized) {
       // 4. Update UI states
       useLocalStorageFallback = false; // Reset fallback if Firestore succeeds
       renderTasks();
+      renderKPIs(tasks);
+      renderAnalytics(tasks);
       setSyncState("synced");
       console.log("Successfully synced tasks with Firestore!");
 
@@ -441,6 +446,8 @@ if (isInitialized) {
       tasks = [];
     }
     renderTasks();
+    renderKPIs(tasks);
+    renderAnalytics(tasks);
   }
 
   function saveLocalTasks() {
@@ -573,7 +580,8 @@ if (isInitialized) {
     // Optimistic UI updates
     tasks.unshift({ id: taskId, ...newTask });
     renderTasks();
-
+    renderKPIs(tasks);
+    renderAnalytics(tasks);
     if (useLocalStorageFallback) {
       saveLocalTasks();
       setSyncState("synced");
@@ -598,7 +606,8 @@ if (isInitialized) {
     const newStatus = !tasks[taskIndex].completed;
     tasks[taskIndex].completed = newStatus;
     renderTasks(); // update UI immediately
-
+    renderKPIs(tasks);
+    renderAnalytics(tasks);
     setSyncState("syncing");
 
     if (useLocalStorageFallback) {
@@ -622,7 +631,8 @@ if (isInitialized) {
   async function deleteTask(taskId) {
     tasks = tasks.filter(t => t.id !== taskId);
     renderTasks();
-
+    renderAnalytics(tasks);
+    renderKPIs(tasks);
     setSyncState("syncing");
 
     if (useLocalStorageFallback) {
@@ -942,14 +952,18 @@ setInterval(checkReminders, 30000);
 
 //analytics related
 
-function renderKPIs(tasks) {
-  document.getElementById("kpi-completed").innerText =
-    getCompletedTasks(tasks).length;
+import { renderKPIs } from "./analytics.js";
 
-  document.getElementById("kpi-rate").innerText =
-    getCompletionRate(tasks) + "%";
+function showAnalytics() {
+  document.getElementById("analytics-section").classList.remove("hidden");
+  document.getElementById("focus-section").classList.add("hidden");
 
-  document.getElementById("kpi-focus").innerText =
-    getFocusHours(tasks) + " hrs";
+  renderKPIs(tasks);
 }
-renderKPIs(tasks);
+
+function showFocus() {
+  document.getElementById("analytics-section").classList.add("hidden");
+  document.getElementById("focus-section").classList.remove("hidden");
+}
+
+showAnalytics();

@@ -19,7 +19,7 @@
 </head>
 
 <body>
-  <div class="screen active" id="dashboard-view">
+  <div id="dashboard-view">
     <!-- Glowing Background Blobs -->
     <div class="glow-bg">
       <div class="blob blob-1"></div>
@@ -333,10 +333,42 @@
         </section>
 
       </main>
-    </div>
+      <section id="analytics-section">
+        <div id="kpi-grid">
+          <div class="kpi-card">
+            <h3>Completion Rate</h3>
+            <p id="kpi-rate">0%</p>
+          </div>
+          <div class="kpi-card">
+            <h3>Tasks Completed</h3>
+            <p id="kpi-completed">0</p>
+          </div>
+        </div>
+        <section id="charts-area">
 
-    <script type="module" src="app.js"></script>
+          <div class="chart-card">
+            <h3>Task Status</h3>
+            <canvas id="statusChart"></canvas>
+          </div>
+
+          <div class="chart-card">
+            <h3>Priority Distribution</h3>
+            <canvas id="priorityChart"></canvas>
+          </div>
+
+          <div class="chart-card">
+            <h3>Insights</h3>
+            <div id="analytics-insights"></div>
+          </div>
+        </section>
+        <section id="focus-section" class="hidden">
+          <div id="focus-widget"></div>
+        </section>
+    </div>
   </div>
+  <script type="module" src="analytics.js"></script>
+  <script type="module" src="app.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 
 </html>

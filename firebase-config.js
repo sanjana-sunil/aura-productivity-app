@@ -1,5 +1,5 @@
 // firebase-config.js
-
+console.log("Firebase app init starting");
 // 1. Hardcode your actual Firebase credentials here
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -35,8 +35,18 @@ if (savedConfigStr) {
 }
 
 // Imports from the Firebase CDN (v10 modular SDK)
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { getFirestore, collection, doc, setDoc, getDocs, deleteDoc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  getDocs,
+  deleteDoc,
+  updateDoc,
+  query,
+  orderBy
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 let app = null;
 let auth = null;
@@ -51,13 +61,13 @@ import {
   signOut,
   onAuthStateChanged,
   signInWithPopup
-} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 // ... your standard variables ...
-
+app = initializeApp(activeConfig);
+console.log("App initialized:", app);
 if (isValidConfig(activeConfig)) {
   try {
     console.log("we're here");
-    app = initializeApp(activeConfig);
     auth = getAuth(app);
     provider = new GoogleAuthProvider();
     provider.setCustomParameters({
@@ -118,3 +128,33 @@ export function saveConfig(config) {
 export function clearConfig() {
   localStorage.removeItem("aura_firebase_config");
 }
+
+//messaging functions
+import { getMessaging, getToken } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-messaging.js";
+
+let messaging = null;
+
+function getMessagingSafe() {
+  if (!messaging) {
+    messaging = getMessaging(app);
+  }
+  return messaging;
+}
+export const requestForToken = async () => {
+  const permission = await Notification.requestPermission();
+
+  if (permission !== "granted") return;
+
+  const messaging = await getMessagingSafe();
+
+  if (!messaging) {
+    console.log("Messaging failed due to registry mismatch");
+    return;
+  }
+
+  const token = await getToken(messaging, {
+    vapidKey: "BI2ocYuY0PRO1-2uVJSmu1g_3tOHc2Amr-I9K4SHtBnldUGqx74dEo-OJh89n4wJ6nA9DEYuDLf9tdCySN6s2gA"
+  });
+
+  console.log("FCM TOKEN:", token);
+};

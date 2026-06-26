@@ -1,4 +1,11 @@
 /* CSS Custom Properties & Design Tokens */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 :root {
   --font-header: 'Outfit', sans-serif;
   --font-body: 'Plus Jakarta Sans', sans-serif;
@@ -1369,4 +1376,46 @@ h4 {
 
 .calendar-btn:hover {
   background: #d2e3fc;
+}
+
+#dashboard-view {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+#kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 15px;
+  width: 100%;
+}
+
+.kpi-card {
+  background: #1e1e2f;
+  color: white;
+  padding: 20px;
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.kpi-card h3 {
+  margin: 0;
+  font-size: 14px;
+  opacity: 0.7;
+}
+
+.kpi-card p {
+  font-size: 24px;
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+#app-container {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
 }

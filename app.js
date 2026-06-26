@@ -919,9 +919,7 @@ console.log(await import("https://www.gstatic.com/firebasejs/10.12.2/firebase-me
 console.log(Notification.permission);
 async function initNotifications() {
   try {
-    const registration = await navigator.serviceWorker.register(
-      "/firebase-messaging-sw.js"
-    );
+    navigator.serviceWorker.register("firebase-messaging-sw.js");
 
     console.log("SW registered");
 

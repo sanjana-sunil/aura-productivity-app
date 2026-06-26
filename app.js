@@ -227,9 +227,8 @@ if (isInitialized) {
       currentUser = user;
       const userNameElement = document.getElementById("user-name");
       const userEmailElement = document.getElementById("user-email");
-      document.getElementById("user-avatar").src = user.photoURL;
-      console.log(user.displayName);
-      console.log(user.email);
+      const avatar = document.getElementById("user-avatar");
+      avatar.src = user.photoURL || "default-avatar.png";
       if (userNameElement) {
         userNameElement.textContent = user.displayName || "User";
       }
@@ -484,9 +483,24 @@ if (isInitialized) {
           <div class="task-details-wrapper">
             <span class="task-text">${escapeHtml(task.title)}</span>
             <div class="task-meta-tags">
-              <span class="meta-tag priority-${task.priority || 'medium'}">${capitalize(task.priority || 'medium')}</span>
-              ${task.deadline ? `<span class="meta-tag tag-deadline ${isOverdue(task.deadline) ? 'overdue' : ''}">📅 ${formatDate(task.deadline)}</span>` : ''}
-              ${task.duration ? `<span class="meta-tag tag-duration">⏱️ ${formatDuration(task.duration)}</span>` : ''}
+                <span class="meta-tag priority-${task.priority || 'medium'}">
+                  ${capitalize(task.priority || 'medium')}
+                </span>
+
+                ${task.deadline ? `
+                  <span class="meta-tag tag-deadline ${isOverdue(task.deadline) ? 'overdue' : ''}">
+                    📅 ${formatDate(task.deadline)}
+                  </span>` : ''}
+
+                ${task.duration ? `
+                  <span class="meta-tag tag-duration">
+                    ⏱️ ${formatDuration(task.duration)}
+                  </span>` : ''}
+
+                <!-- NEW: Google Calendar Button -->
+                <button class="calendar-btn" title="Add to Google Calendar">
+                  🗓 Add
+                </button>
             </div>
           </div>
         </div>
@@ -503,7 +517,9 @@ if (isInitialized) {
         // Bind dynamic events to the rendered elements
         li.querySelector(".checkbox-custom").addEventListener("click", () => toggleTask(task.id));
         li.querySelector(".btn-delete").addEventListener("click", () => deleteTask(task.id));
-
+        li.querySelector(".calendar-btn").addEventListener("click", () => {
+          addToGoogleCalendar(task);
+        });
         taskList.appendChild(li);
       });
     }
@@ -637,6 +653,22 @@ if (isInitialized) {
       "'": '&#039;'
     };
     return text.replace(/[&<>"']/g, function (m) { return map[m]; });
+  }
+
+  function addToGoogleCalendar(task) {
+    const formatDate = (date) =>
+      new Date(date).toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+
+    const start = task.deadline ? new Date(task.deadline) : new Date();
+    const end = new Date(start.getTime() + (task.duration || 60) * 60000);
+
+    const url =
+      "https://calendar.google.com/calendar/render?action=TEMPLATE" +
+      `&text=${encodeURIComponent(task.title)}` +
+      `&details=${encodeURIComponent("From your Productivity App")}` +
+      `&dates=${formatDate(start)}/${formatDate(end)}`;
+
+    window.open(url, "_blank");
   }
 
   // --- 5. FOCUS POMODORO TIMER ENGINE ---

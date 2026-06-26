@@ -80,7 +80,7 @@ a:hover {
 }
 
 .blob-1 {
-  background: radial-gradient(circle, var(--accent-purple) 0%, rgba(0,0,0,0) 70%);
+  background: radial-gradient(circle, var(--accent-purple) 0%, rgba(0, 0, 0, 0) 70%);
   width: 50vw;
   height: 50vw;
   top: -15%;
@@ -89,7 +89,7 @@ a:hover {
 }
 
 .blob-2 {
-  background: radial-gradient(circle, var(--accent-orange) 0%, rgba(0,0,0,0) 70%);
+  background: radial-gradient(circle, var(--accent-orange) 0%, rgba(0, 0, 0, 0) 70%);
   width: 45vw;
   height: 45vw;
   bottom: -15%;
@@ -99,7 +99,7 @@ a:hover {
 }
 
 .blob-3 {
-  background: radial-gradient(circle, var(--accent-teal) 0%, rgba(0,0,0,0) 70%);
+  background: radial-gradient(circle, var(--accent-teal) 0%, rgba(0, 0, 0, 0) 70%);
   width: 35vw;
   height: 35vw;
   top: 35%;
@@ -113,9 +113,11 @@ a:hover {
   0% {
     transform: translate(0, 0) scale(1);
   }
+
   50% {
     transform: translate(4%, 6%) scale(1.08);
   }
+
   100% {
     transform: translate(-3%, -4%) scale(0.95);
   }
@@ -137,7 +139,10 @@ a:hover {
 }
 
 /* Typography elements */
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
   font-family: var(--font-header);
   font-weight: 700;
   letter-spacing: -0.02em;
@@ -197,7 +202,9 @@ h1, h2, h3, h4 {
 }
 
 @keyframes spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 /* General Buttons */
@@ -304,7 +311,8 @@ h1, h2, h3, h4 {
   color: var(--text-muted);
 }
 
-.input-group input, .input-group textarea {
+.input-group input,
+.input-group textarea {
   background: rgba(255, 255, 255, 0.03);
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 8px;
@@ -315,7 +323,8 @@ h1, h2, h3, h4 {
   transition: var(--transition-fast);
 }
 
-.input-group input:focus, .input-group textarea:focus {
+.input-group input:focus,
+.input-group textarea:focus {
   outline: none;
   border-color: var(--accent-purple);
   box-shadow: 0 0 0 3px var(--accent-purple-glow);
@@ -333,7 +342,8 @@ h1, h2, h3, h4 {
   letter-spacing: 0.05em;
 }
 
-.form-divider::before, .form-divider::after {
+.form-divider::before,
+.form-divider::after {
   content: '';
   flex: 1;
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
@@ -376,7 +386,8 @@ h1, h2, h3, h4 {
   box-shadow: 0 0 10px var(--accent-purple-glow);
 }
 
-.logo h1, .logo h2 {
+.logo h1,
+.logo h2 {
   font-family: var(--font-header);
   font-weight: 800;
   letter-spacing: 0.05em;
@@ -587,9 +598,17 @@ h1, h2, h3, h4 {
 }
 
 @keyframes pulseSync {
-  0% { opacity: 0.4; }
-  50% { opacity: 1; }
-  100% { opacity: 0.4; }
+  0% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0.4;
+  }
 }
 
 .sync-dot {
@@ -648,6 +667,7 @@ h1, h2, h3, h4 {
     grid-template-columns: 1fr;
     padding: 20px 20px 40px 20px;
   }
+
   .navbar {
     padding: 15px 20px;
   }
@@ -870,6 +890,7 @@ h1, h2, h3, h4 {
   cursor: pointer;
   transition: var(--transition-fast);
 }
+
 .form-detail-group input[type="date"]::-webkit-calendar-picker-indicator:hover {
   filter: invert(1) opacity(0.8);
 }
@@ -956,6 +977,7 @@ h1, h2, h3, h4 {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: translateY(0);
@@ -1020,7 +1042,8 @@ h1, h2, h3, h4 {
   display: flex;
   flex-direction: column;
   flex: 1;
-  min-width: 0; /* Ensures proper text truncation/wrapping inside flex box */
+  min-width: 0;
+  /* Ensures proper text truncation/wrapping inside flex box */
 }
 
 .task-text {
@@ -1160,9 +1183,17 @@ h1, h2, h3, h4 {
 }
 
 @keyframes borderPulse {
-  0% { border-color: var(--card-border); }
-  50% { border-color: var(--accent-orange); }
-  100% { border-color: var(--card-border); }
+  0% {
+    border-color: var(--card-border);
+  }
+
+  50% {
+    border-color: var(--accent-orange);
+  }
+
+  100% {
+    border-color: var(--card-border);
+  }
 }
 
 .timer-card-panel .panel-header {
@@ -1323,4 +1354,19 @@ h1, h2, h3, h4 {
   opacity: 1;
   visibility: visible;
   transform: translateX(-50%) translateY(0);
+}
+
+.calendar-btn {
+  margin-left: 8px;
+  padding: 4px 8px;
+  border: none;
+  border-radius: 6px;
+  background: #e8f0fe;
+  color: #1a73e8;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.calendar-btn:hover {
+  background: #d2e3fc;
 }
